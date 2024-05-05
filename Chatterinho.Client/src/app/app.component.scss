@@ -1,0 +1,19 @@
+@use "variables" as var;
+@use "palette";
+
+mat-sidenav-container {
+    position: absolute;
+    top: var.$navbar-height;
+    left: 0;
+    right: 0;
+
+    mat-sidenav {
+        width: 220px;
+        background-color: palette.$primary;
+    }
+
+    mat-sidenav-content {
+        height: calc(100vh - var.$navbar-height);
+        padding-bottom: 10px;
+    }
+}

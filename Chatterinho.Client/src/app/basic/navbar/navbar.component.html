@@ -1,0 +1,28 @@
+<mat-toolbar class="mat-elevation-z4">
+    <div class="container">
+        <div class="navbar">
+            <div class="d-flex align-items-center">
+                @if(isMobile){
+                <button mat-icon-button
+                        (click)="menuToggle()">
+                    @if (isMenuOpen) {
+                    <mat-icon>close</mat-icon>
+                    }@else{
+                    <mat-icon>menu</mat-icon>
+                    }
+                </button>
+                }
+                <div class="navbar__logo">
+                    <div>
+                        <a [routerLink]="'/'">
+                            Chatterinho
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div>
+
+            </div>
+        </div>
+    </div>
+</mat-toolbar>
