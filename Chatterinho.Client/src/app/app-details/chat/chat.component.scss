@@ -1,0 +1,40 @@
+@use "variables" as var;
+
+.chat {
+    $self: &;
+    height: calc(100vh - (var.$navbar-height + 10px));
+    padding-top: 25px;
+    display: flex;
+    flex-direction: column;
+
+    h2 {
+        margin: 0px;
+    }
+
+    mat-card {
+        height: 100%;
+
+        mat-card-content {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+
+            #{$self}__messages {
+                overflow-y: auto;
+                padding: 0 5px;
+                margin-bottom: auto;
+            }
+
+            #{$self}__send-container {
+                display: flex;
+                padding-left: 0px;
+
+                > button {
+                    margin-bottom: 32px;
+                    margin-top: auto;
+                }
+            }
+        }
+    }
+}

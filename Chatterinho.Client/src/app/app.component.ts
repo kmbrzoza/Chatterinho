@@ -7,6 +7,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { NavbarComponent } from './basic/navbar/navbar.component';
 import { MenuComponent } from './basic/menu/menu.component';
 import { SpinnerComponent } from './shared/components/spinner/spinner.component';
+import { HubService } from './core/services/hub.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
     selector: 'app-root',
@@ -36,8 +38,11 @@ export class AppComponent {
     }
 
     constructor(
-        private _observer: BreakpointObserver
-    ) { }
+        private _observer: BreakpointObserver,
+        private _hubService: HubService
+    ) {
+        this._hubService.init();
+    }
 
     menuToggle(): void {
         this._isMenuOpen$.next(!this._isMenuOpen$.value);

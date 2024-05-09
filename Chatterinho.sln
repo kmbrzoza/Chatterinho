@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chatterinho.Api", "Chatterinho.Api\Chatterinho.Api.csproj", "{29973115-D6D3-4C5A-AF4B-F247D50C0A3D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chatterinho.Api", "Chatterinho.Api\Chatterinho.Api.csproj", "{29973115-D6D3-4C5A-AF4B-F247D50C0A3D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chatterinho.Notifications", "Chatterinho.Notifications\Chatterinho.Notifications.csproj", "{99C0986F-DBC1-404C-A0FF-29A485B84399}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{29973115-D6D3-4C5A-AF4B-F247D50C0A3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29973115-D6D3-4C5A-AF4B-F247D50C0A3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{29973115-D6D3-4C5A-AF4B-F247D50C0A3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99C0986F-DBC1-404C-A0FF-29A485B84399}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99C0986F-DBC1-404C-A0FF-29A485B84399}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99C0986F-DBC1-404C-A0FF-29A485B84399}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99C0986F-DBC1-404C-A0FF-29A485B84399}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

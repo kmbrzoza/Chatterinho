@@ -1,6 +1,0 @@
-@Chatterinho.Api_HostAddress = http://localhost:5025
-
-GET {{Chatterinho.Api_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

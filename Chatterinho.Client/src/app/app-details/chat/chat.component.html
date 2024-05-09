@@ -1,0 +1,43 @@
+<div class="chat">
+    @if(nick()){
+    <h2>Witaj {{nick()}}!</h2>
+    <mat-divider class="my-4"></mat-divider>
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>Chat</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <mat-divider></mat-divider>
+            <div class="chat__messages">
+                @if(messages()){
+                @for(message of messages(); track message;){
+                <app-chat-message [isCurrentUser]="nick() === message.nick"
+                                  [chatMessage]="message" />
+                }
+                }
+            </div>
+            <form class="row"
+                  [formGroup]="form">
+                <mat-form-field class="col">
+                    <textarea [placeholder]="'Wpisz wiadomość...'"
+                              matInput
+                              cdkTextareaAutosize
+                              cdkAutosizeMinRows="1"
+                              cdkAutosizeMaxRows="5"
+                              formControlName="message"
+                              (keydown.enter)="sendMessage(); $event.preventDefault()"></textarea>
+                </mat-form-field>
+                <div class="chat__send-container col-auto">
+                    <button mat-icon-button
+                            color="primary"
+                            type="button"
+                            [disabled]="!form.controls.message.value"
+                            (click)="sendMessage()">
+                        <mat-icon>send</mat-icon>
+                    </button>
+                </div>
+            </form>
+        </mat-card-content>
+    </mat-card>
+    }
+</div>

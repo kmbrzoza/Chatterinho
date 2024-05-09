@@ -1,0 +1,49 @@
+@use "palette";
+@use "variables" as var;
+
+.message {
+    $self: &;
+
+    &__current-user,
+    &__other-user {
+        margin: 10px 0px;
+
+        #{$self}__text {
+            width: fit-content;
+            max-width: 80%;
+            padding: 10px;
+            margin: 1px 0px;
+            word-wrap: break-word;
+        }
+
+        #{$self}__sender-nick {
+            font-size: 13px;
+            color: var.$font-grey-color;
+        }
+
+        #{$self}__date {
+            font-size: 11px;
+            color: var.$font-grey-color;
+        }
+    }
+
+    &__current-user {
+        text-align: end;
+
+        #{$self}__text {
+            margin-left: auto;
+            border-radius: 8px 8px 0px 8px;
+            background-color: palette.$primary-100;
+        }
+    }
+
+    &__other-user {
+        text-align: start;
+
+        #{$self}__text {
+            margin-right: auto;
+            border-radius: 8px 8px 8px 0px;
+            background-color: palette.$accent-100;
+        }
+    }
+}

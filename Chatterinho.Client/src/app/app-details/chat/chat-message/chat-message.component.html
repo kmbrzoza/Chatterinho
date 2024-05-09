@@ -1,0 +1,15 @@
+<div class="message">
+    <div [ngClass]="isCurrentUser ? 'message__current-user' : 'message__other-user'">
+        @if(!isCurrentUser){
+        <div class="message__sender-nick">
+            {{chatMessage.nick}}
+        </div>
+        }
+        <div class="message__text"
+             [innerText]="chatMessage.message">
+        </div>
+        <div class="message__date">
+            {{chatMessage.date | date:'HH:mm dd.MM.yyyy'}}
+        </div>
+    </div>
+</div>
