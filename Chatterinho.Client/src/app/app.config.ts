@@ -20,7 +20,10 @@ export const appConfig: ApplicationConfig = {
     ]
 };
 
-
 export const configuration = {
-    apiUrl: 'https://localhost:7040'
+    apiUrl: 'https://localhost:7040',
+    deepgramApiKey: ''
 }
+
+import * as process from 'process';
+window['process'] = process;

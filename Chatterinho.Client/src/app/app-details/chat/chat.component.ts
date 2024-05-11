@@ -1,10 +1,10 @@
-import { Component, OnInit, WritableSignal } from '@angular/core';
+import { Component, OnInit, WritableSignal, signal } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { SetNickComponent } from './set-nick/set-nick.component';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { TextFieldModule } from '@angular/cdk/text-field';
@@ -14,6 +14,9 @@ import { NewChatMessage, ChatMessageForm, ReceivedChatMessage } from '../../core
 import { ControlsOf } from '../../../main';
 import { ChatService } from '../../core/services/chat.service';
 import { ChatMessageComponent } from './chat-message/chat-message.component';
+import { createClient, LiveClient, LiveTranscriptionEvents } from '@deepgram/sdk';
+import { configuration } from '../../app.config';
+import { Subject } from 'rxjs';
 
 @Component({
     selector: 'app-chat',
@@ -36,6 +39,10 @@ export class ChatComponent implements OnInit {
     nick: WritableSignal<string | null>;
     form: FormGroup<ControlsOf<ChatMessageForm>>;
     messages: WritableSignal<ReceivedChatMessage[]>;
+    microphone = signal<MediaRecorder | undefined>(undefined);
+
+    private _dataFromMicrophone = new Subject<Blob>();
+    private _connection: LiveClient;
 
     constructor(
         private _dialog: MatDialog,
@@ -61,6 +68,12 @@ export class ChatComponent implements OnInit {
                 this._nickService.setNick(result);
             }
         });
+
+        this._dataFromMicrophone.subscribe(data => {
+            if (this._connection && this.microphone()) {
+                this._connection.send(data);
+            }
+        })
     }
 
     sendMessage(): void {
@@ -74,6 +87,92 @@ export class ChatComponent implements OnInit {
 
             this._chatService.sendChatMessage(newMessage as NewChatMessage)
                 .subscribe();
+        }
+    }
+
+    async microphoneClicked(): Promise<void> {
+        if (!this.microphone()) {
+            try {
+                this.microphone.set(await this.getMicrophone());
+                this.initDeepgram();
+                await this.openMicrophone(this.microphone() as MediaRecorder);
+            } catch (error) {
+                console.error("error opening microphone:", error);
+            }
+        } else {
+            await this.closeMicrophone(this.microphone() as MediaRecorder);
+            this.microphone.set(undefined);
+        }
+    }
+
+    private initDeepgram(): void {
+        const deepgram = createClient(configuration.deepgramApiKey);
+
+        this._connection = deepgram.listen.live({
+            model: "nova-2",
+            language: "pl",
+            smart_format: true
+        });
+
+        this._connection.on(LiveTranscriptionEvents.Open, () => {
+            this._connection.on(LiveTranscriptionEvents.Close, () => {
+                console.log("Connection closed.");
+                this.closeMicrophone(this.microphone());
+                this.microphone.set(undefined);
+            });
+
+            this._connection.on(LiveTranscriptionEvents.Transcript, (data) => {
+                console.log(data);
+                if (data.channel.alternatives[0].transcript && data.is_final === true) {
+                    const prefix = this.form.controls.message.value ? this.form.controls.message.value + ' ' : '';
+                    this.form.controls.message.setValue(prefix + data.channel.alternatives[0].transcript);
+                }
+            });
+
+            this._connection.on(LiveTranscriptionEvents.Metadata, (data) => {
+                console.log(data);
+            });
+
+            this._connection.on(LiveTranscriptionEvents.Error, (err) => {
+                console.error(err);
+            });
+        });
+    }
+
+    private async getMicrophone(): Promise<MediaRecorder> {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            return new MediaRecorder(stream, { mimeType: "audio/webm" });
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    private async openMicrophone(microphone: MediaRecorder) {
+        return new Promise((resolve) => {
+            microphone.onstart = () => {
+                console.log("client: microphone opened");
+                resolve(undefined);
+            };
+
+            microphone.onstop = () => {
+                console.log("client: microphone closed");
+            };
+
+            microphone.ondataavailable = (event) => {
+                console.log("client: microphone data received");
+                if (event.data.size > 0 && this.microphone()) {
+                    this._dataFromMicrophone.next(event.data);
+                }
+            };
+
+            microphone.start(1000);
+        });
+    }
+
+    async closeMicrophone(microphone: MediaRecorder | undefined) {
+        if (microphone) {
+            microphone.stop();
         }
     }
 }

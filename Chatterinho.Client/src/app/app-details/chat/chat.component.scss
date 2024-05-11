@@ -28,6 +28,7 @@
 
             #{$self}__send-container {
                 display: flex;
+                gap: 5px;
                 padding-left: 0px;
 
                 > button {

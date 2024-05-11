@@ -8,7 +8,6 @@ import { NavbarComponent } from './basic/navbar/navbar.component';
 import { MenuComponent } from './basic/menu/menu.component';
 import { SpinnerComponent } from './shared/components/spinner/spinner.component';
 import { HubService } from './core/services/hub.service';
-import { HttpClientModule } from '@angular/common/http';
 
 @Component({
     selector: 'app-root',
