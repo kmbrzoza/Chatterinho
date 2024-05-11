@@ -102,6 +102,7 @@ export class ChatComponent implements OnInit {
         } else {
             await this.closeMicrophone(this.microphone() as MediaRecorder);
             this.microphone.set(undefined);
+            this._connection.finish();
         }
     }
 
